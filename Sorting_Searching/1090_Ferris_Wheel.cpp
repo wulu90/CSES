@@ -1,38 +1,43 @@
+#include <algorithm>
 #include <iostream>
-#include <map>
+#include <unordered_set>
 #include <vector>
 
 int main() {
     int n, x, p;
     std::cin >> n;
     std::cin >> x;
-    std::map<int, int> weight_num;
-    while (std::cin >> p) {
-        weight_num[p] += 1;
+
+    std::vector<int> weights(n);
+    for (int i = 0; i < n; i++) {
+        std::cin >> weights[i];
     }
-
     int gondolas = 0;
+    std::sort(weights.begin(), weights.end());
 
-    for (auto it = weight_num.rbegin(); it != weight_num.rend(); it++) {
-        for (int i = 0; i < it->second;) {
+    std::unordered_set<int> rms;    // remove index;
+
+    if (weights[0] >= x) {
+        gondolas = n;
+        std::cout << gondolas << std::endl;
+        return 0;
+    }
+    int overindex = n - 1;
+
+    for (int i = n - 1; i >= 0; i--) {
+        if (weights[i] < x) {
+            overindex = i;
+            break;
+        }
+    }
+    gondolas += n - 1 - overindex;
+    for (int i = overindex; i >= 0; i--) {
+        if (!rms.contains(i)) {
             gondolas++;
-            it->second--;
-            int dist = 0;
-
-            if (x - it->first >= weight_num.begin()->first) {
-                auto lb = weight_num.lower_bound(x - it->first);
-                if (lb != weight_num.end()) {
-                    dist = std::distance(weight_num.begin(), lb);
-                } else {
-                    dist = std::distance(it, weight_num.rend());
-                }
-
-                for (int j = dist; j >= 0; j--) {
-                    auto it_s = std::next(weight_num.begin(), j);
-                    if (it_s->first <= x - it->first && it_s->second != 0) {
-                        it_s->second--;
-                        break;
-                    }
+            for (int j = i - 1; j >= 0; j--) {
+                if (!rms.contains(j) && weights[j] <= x - weights[i]) {
+                    rms.insert(j);
+                    break;
                 }
             }
         }
