@@ -1,6 +1,5 @@
 #include <algorithm>
 #include <iostream>
-#include <unordered_set>
 #include <vector>
 
 int main() {
@@ -14,8 +13,6 @@ int main() {
     }
     int gondolas = 0;
     std::sort(weights.begin(), weights.end());
-
-    std::unordered_set<int> rms;    // remove index;
 
     if (weights[0] >= x) {
         gondolas = n;
@@ -32,11 +29,11 @@ int main() {
     }
     gondolas += n - 1 - overindex;
     for (int i = overindex; i >= 0; i--) {
-        if (!rms.contains(i)) {
+        if (weights[i] != 0) {
             gondolas++;
             for (int j = i - 1; j >= 0; j--) {
-                if (!rms.contains(j) && weights[j] <= x - weights[i]) {
-                    rms.insert(j);
+                if (weights[j] != 0 && weights[j] <= x - weights[i]) {
+                    weights[j] = 0;
                     break;
                 }
             }
