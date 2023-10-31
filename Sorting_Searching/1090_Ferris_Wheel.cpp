@@ -3,7 +3,7 @@
 #include <vector>
 
 int main() {
-    int n, x, p;
+    int n, x;
     std::cin >> n;
     std::cin >> x;
 
@@ -11,34 +11,24 @@ int main() {
     for (int i = 0; i < n; i++) {
         std::cin >> weights[i];
     }
-    int gondolas = 0;
     std::sort(weights.begin(), weights.end());
 
-    if (weights[0] >= x) {
-        gondolas = n;
-        std::cout << gondolas << std::endl;
-        return 0;
-    }
-    int overindex = n - 1;
+    int gondolas = n;
 
-    for (int i = n - 1; i >= 0; i--) {
-        if (weights[i] < x) {
-            overindex = i;
-            break;
+    int i = 0;
+    int j = n - 1;
+
+    while (i < j) {
+        if (weights[i] + weights[j] > x) {
+            j--;
+
+        } else {
+            i++;
+            j--;
+            gondolas--;
         }
     }
-    gondolas += n - 1 - overindex;
-    for (int i = overindex; i >= 0; i--) {
-        if (weights[i] != 0) {
-            gondolas++;
-            for (int j = i - 1; j >= 0; j--) {
-                if (weights[j] != 0 && weights[j] <= x - weights[i]) {
-                    weights[j] = 0;
-                    break;
-                }
-            }
-        }
-    }
+
     std::cout << gondolas << std::endl;
     return 0;
 }
