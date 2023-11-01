@@ -1,36 +1,33 @@
 #include <algorithm>
 #include <iostream>
-#include <limits>
 #include <vector>
 
+using namespace std;
+
 int main() {
-    u_int64_t n, a, b;
-    std::cin >> n;
-    std::vector<int> times;
-    std::vector<std::pair<int, int>> customers(n);
-    u_int64_t mintime = std::numeric_limits<u_int64_t>::max();
-    u_int64_t maxtime = 0;
-    for (size_t i = 0; i < n; i++) {
-        std::cin >> a >> b;
-        customers[i].first  = a;
-        customers[i].second = b;
-        if (a < mintime) {
-            mintime = a;
-        }
-        if (b > maxtime) {
-            maxtime = b;
-        }
+    int n, a, b;
+    cin >> n;
+
+    vector<pair<int, int>> times;
+
+    for (int i = 0; i < n; i++) {
+        cin >> a >> b;
+
+        times.push_back({a, 1});
+        times.push_back({b, -1});
     }
 
-    times.resize(maxtime - mintime + 1);
+    sort(times.begin(), times.end());
 
-    for (auto& [a, b] : customers) {
-        for (size_t i = a - mintime; i <= b - mintime; i++) {
-            times[i]++;
-        }
+    int currs = 0;
+    int maxcu = 0;
+
+    for (const auto& [t, s] : times) {
+        currs += s;
+        maxcu = max(maxcu, currs);
     }
 
-    auto it = std::max_element(times.begin(), times.end());
-    std::cout << *it << std::endl;
+    cout << maxcu << endl;
+
     return 0;
 }
