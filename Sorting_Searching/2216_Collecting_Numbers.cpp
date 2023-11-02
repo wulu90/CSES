@@ -8,20 +8,19 @@ int main() {
     cin >> n;
     unordered_map<int, int> n_i;
 
-    for (int i = 0; i < n; i++) {
+    for (int i = 1; i <= n; i++) {
         cin >> x;
         n_i.insert({x, i});
     }
 
-    int num    = 1;
-    int inx    = n_i[num];
+    int inx    = n_i[1];
     int rounds = 1;
-    for (int i = 2; i <= n; i++) {
-        if (n_i[i] < inx) {
+
+    for (int num = 2; num <= n; num++) {
+        if (n_i[num] < inx) {
             rounds++;
         }
-        num = i;
-        inx = n_i[i];
+        inx = n_i[num];
     }
 
     cout << rounds << endl;
